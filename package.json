@@ -1,0 +1,11 @@
+{
+  "name": "web-framework-project",
+  "version": "1.0.0",
+  "description": "Web Framework Project - Teamwork",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Miika Ståhl, Mirkka Kato, Tino Valve",
+  "license": "ISC"
+}
