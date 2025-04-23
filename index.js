@@ -30,9 +30,8 @@ app.get('/feedback', (request, response) => {
 });
 
 app.post('/send-feedback', (request, response) => {
-    sendMail(request.body.email, request.body.subject, request.body.text)
+    sendMail(request.body.email, request.body.subject, request.body.text),
     response.redirect(303, '/thank-you')
-    
 });
 
 app.get('/thank-you', (request, response) => {
@@ -62,10 +61,10 @@ const transporter = nodemailer.createTransport({
 
 async function sendMail(email, subject, text) {
     const info = await transporter.sendMail({
-        from: email, // sender address
-        to: process.env.MAILUSERNAME, // receiver address
+        from: email, // Sender address
+        to: process.env.MAILUSERNAME, // Receiver address
         subject: subject, // Subject line
-        text: text, // plain text body
+        text: text, // Plain text body
       });
 }
 
