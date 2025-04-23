@@ -1,0 +1,13 @@
+<h1>Welcome to the homepage of {{title}}</h1>
+<br>
+<form action="/send-feedback" method="POST">
+    <label for="email">Your email address:</label><br>
+    <input type="text" id="email" name="email"><br><br>
+    <input type="radio" id="feedback" name="subject" value="feedback">
+    <label for="feedback">Feedback</label><br>
+    <input type="radio" id="issue" name="subject" value="issue">
+    <label for="issue">Found an issue that needs fixing</label><br><br>
+    <label for="text">Your message:</label><br>
+    <textarea name="text" rows="5" cols="50"></textarea>
+    <input type="submit" name="submit" value="Send">
+</form>
