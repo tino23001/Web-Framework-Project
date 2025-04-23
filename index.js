@@ -3,37 +3,8 @@ const exphbs = require('express-handlebars');
 const dotenv = require('dotenv');
 dotenv.config();
 const app = express();
-
-const parseData = (req, res, next) => {
-    if (req.method === 'POST') {
-        const formData = {}
-        req.on('data', data => {
- 
-            // Decode and parse data
-            const parsedData = 
-                decodeURIComponent(data).split('&')
- 
-            for (let data of parsedData) {
- 
-                decodedData = decodeURIComponent(
-                        data.replace(/\+/g, '%20'))
- 
-                const [key, value]
-                    = decodedData.split('=')
- 
-                // Accumulate submitted data
-                // in an object
-                formData[key] = value
-            }
- 
-            // Attach form data in request object
-            req.body = formData
-            next()
-        })
-    } else {
-        next()
-    }
-}
+app.use(express.json());
+app.use(express.urlencoded({extented: false}));
 
 app.engine('handlebars', exphbs.engine({
     defaultLayout: 'main'
@@ -58,14 +29,8 @@ app.get('/feedback', (request, response) => {
     )
 });
 
-app.post('/send-feedback', parseData, (request, response) => {
-    const data = request.body
-    const {
-        email,
-        subject,
-        text
-    } = data
-    sendMail(data.email, data.subject, data.text)
+app.post('/send-feedback', (request, response) => {
+    sendMail(request.body.email, request.body.subject, request.body.text)
     response.redirect(303, '/thank-you')
     
 });
