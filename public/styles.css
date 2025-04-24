@@ -14,7 +14,7 @@ body {
 }
 
 h1 {
-    background-color: blueviolet;
+    background-color: mediumseagreen;
     color:aqua;
     padding: 1em 2em;
 }
@@ -93,5 +93,9 @@ form input[type="submit"] {
 }
 
 .formbox {
+    margin-left: 15px;
+}
+
+.maincontent {
     margin-left: 15px;
 }

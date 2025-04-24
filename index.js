@@ -10,7 +10,7 @@ const LocalStrategy = require('passport-local').Strategy;
 const session = require('express-session');
 
 app.use(session({
-  secret: 'keyboard cat',
+  secret: 'You will never guess it',
   resave: false,
   saveUninitialized: true,
 }));
@@ -28,9 +28,9 @@ passport.deserializeUser((user, done) => {
 
 passport.use(
     new LocalStrategy((username, password, done) => {
-        if (username === 'user' && password === 'password') {
+        if (username === process.env.ADMINUSERNAME && password === process.env.ADMINPASSWORD) {
             console.log('Logged in');
-            return done(null, { id: 1, username: 'user' });
+            return done(null, { id: 1, username: username });
         } else {
             return done(null, false, { message: 'Invalid credentials' });
         }
