@@ -58,7 +58,13 @@ app.get('/', async (request, response) => {
             visitors: visitors(),
             currentTemperature: weatherData.current.temperature_2m,
             todayHigh: weatherData.daily.temperature_2m_max[0],
-            todayLow: weatherData.daily.temperature_2m_min[0]
+            todayLow: weatherData.daily.temperature_2m_min[0],
+            windDir: weatherData.current.wind_direction_10m,
+            clouds: weatherData.current.cloud_cover,
+            windspeed: weatherData.current.wind_speed_10m,
+            windgusts: weatherData.current.wind_gusts_10m,
+            precipitation: weatherData.current.precipitation,
+            weathercode: wmo[weatherData.current.weather_code]
         }
     )
 });
@@ -151,9 +157,38 @@ function visitors() {   // Return count of visitors since 01.04.2025
     }
     return visitorCount;
 }
-
+ var wmo = {
+    0: "Clear sky",
+    1: "Mainly clear, partly cloudy, and overcast",
+    2: "Mainly clear, partly cloudy, and overcast",
+    3: "Mainly clear, partly cloudy, and overcast",
+    45: "Fog and depositing rime fog",
+    48: "Fog and depositing rime fog",
+    51: "Drizzle: Light, moderate, and dense intensity",
+    53: "Drizzle: Light, moderate, and dense intensity",
+    55:	"Drizzle: Light, moderate, and dense intensity",
+    56: "Freezing Drizzle: Light and dense intensity",
+    57:	"Freezing Drizzle: Light and dense intensity",
+    61: "Rain: Slight, moderate and heavy intensity",
+    63: "Rain: Slight, moderate and heavy intensity",
+    65:	"Rain: Slight, moderate and heavy intensity",
+    66: "Freezing Rain: Light and heavy intensity",
+    67:	"Freezing Rain: Light and heavy intensity",
+    71: "Snow fall: Slight, moderate, and heavy intensity",
+    73: "Snow fall: Slight, moderate, and heavy intensity",
+    75:	"Snow fall: Slight, moderate, and heavy intensity",
+    77:	"Snow grains",
+    80: "Rain showers: Slight, moderate, and violent",
+    81: "Rain showers: Slight, moderate, and violent",
+    82:	"Rain showers: Slight, moderate, and violent",
+    85: "Snow showers slight and heavy",
+    86:	"Snow showers slight and heavy",
+    95:	"Thunderstorm: Slight or moderate",
+    96: "Thunderstorm with slight and heavy hail",
+    99:	"Thunderstorm with slight and heavy hail"
+ };
 async function weather() {
-    let weatherData = await fetch('https://api.open-meteo.com/v1/forecast?latitude=60.9167&longitude=24.6333&daily=temperature_2m_max,temperature_2m_min,sunrise,sunset&current=temperature_2m&timezone=auto')
+    let weatherData = await fetch('https://api.open-meteo.com/v1/forecast?latitude=60.9167&longitude=24.6333&daily=temperature_2m_max,temperature_2m_min&current=temperature_2m,wind_direction_10m,cloud_cover,wind_speed_10m,wind_gusts_10m,precipitation,weather_code&timezone=auto')
     .then(res => res.json())
     return weatherData;
 }
