@@ -50,11 +50,15 @@ app.engine('handlebars', exphbs.engine({
 
 app.set('view engine', 'handlebars');
 
-app.get('/', (request, response) => {
+app.get('/', async (request, response) => {
+    let weatherData = await weather();
     response.render('index',
         {
             title: 'Our Park',
-            visitors: visitors()
+            visitors: visitors(),
+            currentTemperature: weatherData.current.temperature_2m,
+            todayHigh: weatherData.daily.temperature_2m_max[0],
+            todayLow: weatherData.daily.temperature_2m_min[0]
         }
     )
 });
@@ -146,6 +150,12 @@ function visitors() {   // Return count of visitors since 01.04.2025
         visitorCount = visitorCount + (hours * 30);
     }
     return visitorCount;
+}
+
+async function weather() {
+    let weatherData = await fetch('https://api.open-meteo.com/v1/forecast?latitude=60.9167&longitude=24.6333&daily=temperature_2m_max,temperature_2m_min,sunrise,sunset&current=temperature_2m&timezone=auto')
+    .then(res => res.json())
+    return weatherData;
 }
 
 const PORT = process.env.PORT || 3300;
