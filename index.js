@@ -5,6 +5,44 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({extented: false}));
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+const session = require('express-session');
+
+app.use(session({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: true,
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.serializeUser((user, done) => {
+    done(null, user.id);
+});
+  
+passport.deserializeUser((user, done) => {
+    done(null, user);
+});
+
+passport.use(
+    new LocalStrategy((username, password, done) => {
+        if (username === 'user' && password === 'password') {
+            console.log('Logged in');
+            return done(null, { id: 1, username: 'user' });
+        } else {
+            return done(null, false, { message: 'Invalid credentials' });
+        }
+    })
+);
+
+checkAuth = (request, response, next) => {
+    if (request.isAuthenticated()) { 
+        return next()
+    }
+    response.redirect('/admin/login')
+}
 
 app.engine('handlebars', exphbs.engine({
     defaultLayout: 'main'
@@ -40,6 +78,30 @@ app.get('/thank-you', (request, response) => {
             title: 'Our Park'
         }
     )
+});
+
+app.get('/admin/login', (request, response) => {
+    response.render('login')
+});
+
+app.post('/login/password', passport.authenticate('local', {
+    successRedirect: '/admin/new-post',
+    failureRedirect: '/admin/login'
+}));
+
+app.get('/admin/new-post', checkAuth, (request, response) => {
+    response.render('new-post')
+});
+
+app.post('/admin/save-post', checkAuth, (request, response) => {
+    // Save to MongoDB database
+});
+
+app.post('/admin/logout', function(req, res, next){
+    req.logout(function(err) {
+      if (err) { return next(err); }
+      res.redirect('/');
+    });
 });
 
 app.use(express.static('public'));
