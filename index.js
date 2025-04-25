@@ -193,5 +193,8 @@ async function weather() {
     return weatherData;
 }
 
+const postRoutes = require('./routes/posts');
+app.use('/api/posts', postRoutes);
+
 const PORT = process.env.PORT || 3300;
 app.listen(PORT, () => console.log(`App listening on port ${PORT}`));
